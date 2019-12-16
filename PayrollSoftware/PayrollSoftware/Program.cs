@@ -44,16 +44,17 @@ namespace PayrollSoftware
 
         public Manager(string name): base(name,managerHourlyRate)
         {
-            if(HoursWorked >= 160)
-            {
-                TotalPay = TotalPay + Allowance;
-            }
+
         }
 
         public override void CalculatePay()
         {
             Allowance = 1000;
             base.CalculatePay();
+            if (HoursWorked > 160)
+            {
+                TotalPay = TotalPay + Allowance;
+            }
         }
 
         public override string ToString()
@@ -67,7 +68,30 @@ namespace PayrollSoftware
 
     class Admin : Staff
     {
+        private const float overtimeRate = 15.5f;
+        private const float adminHourlyrate = 30f;
 
+        public float Overtime { get; set; }
+
+        public Admin(string name) : base(name, adminHourlyrate)
+        {
+
+        }
+
+        public override void CalculatePay()
+        {
+            base.CalculatePay();
+            if (HoursWorked > 160)
+            {
+
+            }
+            Overtime = overtimeRate * (HoursWorked - 160);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 
     class FileReader
