@@ -22,6 +22,7 @@ namespace PayrollSoftware
         public float TotalPay { get; protected set; }
         public float BasicPay { get; private set; }
         public string NameOfStaff { get; private set; }
+        //hWorked is the backing field for HoursWorked
         public int HoursWorked
         {
             get
@@ -41,12 +42,14 @@ namespace PayrollSoftware
             }
         }
 
+        //Constructor for the staff class
         public Staff (string name, float rate)
         {
             NameOfStaff = name;
             hourlyRate = rate;
         }
 
+        //CalculatePay Method
         public virtual void CalculatePay()
         {
             Console.WriteLine("Calculating Pay...");
@@ -54,36 +57,43 @@ namespace PayrollSoftware
             TotalPay = BasicPay;
         }
 
+        //Message displayed on the payroll receipt
         public override string ToString()
         {
             return "\nNameOfStaff = " + NameOfStaff + "\nhourlyRate = " + hourlyRate + "\nhWorked = " + hWorked + "\nBasicPay = " + BasicPay + "\nTotalPay = " + TotalPay;
         }
     }
 
+    //Child of the staff class
     class Manager : Staff
     {
+        //Manager's hourly rate
         private const float managerHourlyRate = 50f;
 
-        private int Allowance { get; set; }
+        //Allowance the manager gets
+        public int Allowance { get; private set; }
 
+        //Constructor for the manager class
         public Manager(string name): base(name,managerHourlyRate)
         {
 
         }
 
+        //Same as staff, except it takes the managers allowance into account
         public override void CalculatePay()
         {
-            Allowance = 1000;
             base.CalculatePay();
+            Allowance = 1000;
             if (HoursWorked > 160)
             {
-                TotalPay = TotalPay + Allowance;
+                TotalPay = BasicPay + Allowance;
             }
         }
 
+        //Message displayed on the payroll receipt
         public override string ToString()
         {
-            return base.ToString();
+            return "\nNameOfStaff = " + NameOfStaff + "\nmanagerHourlyRate = " + managerHourlyRate + "\nHoursWorked = " + HoursWorked + "\nBasicPay = " + BasicPay + "\nAllowance = " + Allowance + "\nTotalPay = " + TotalPay;
         }
 
         
