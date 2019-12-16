@@ -134,15 +134,28 @@ namespace PayrollSoftware
         }
     }
 
+    //This class reads the file staff.txt
     class FileReader
     {
+        //ReadFile method
         public List<Staff> ReadFile()
         {
-            List<Staff> myStaff = new List<Staff>;
+            /* Class Attributes needed to properly read the file,
+             * The list staff, contains the list of all the staff members
+             * the string result is the result from the list,
+             * the string path is the path to staff.txt so the program can read it,
+             * and finally, the string seperator seperates the the staff members name, and position
+             */            
+            List<Staff> myStaff = new List<Staff>();
             string[] result = new string[2];
             string path = "/Users/21Millisorz/Documents/GitHub/Payroll-Software/staff.txt";
             string seperator = ", ";
 
+            /* If the file staff.txt exists, it will read it using streamreader,
+             * and do the following, if the file staff.txt does not exist,
+             * it will display the message "Error: File does not exist"
+             * finally, it will return myStaff
+             */
             if (File.Exists(path))
             {
                 using(StreamReader sr = new StreamReader(path))
