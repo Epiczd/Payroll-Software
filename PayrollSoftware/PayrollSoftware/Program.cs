@@ -27,7 +27,7 @@ namespace PayrollSoftware
         {
             get
             {
-                return hWorked
+                return hWorked;
             }
             set
             {
@@ -185,12 +185,17 @@ namespace PayrollSoftware
     }
 
 
+    //Payslip class
     class PaySlip
     {
+        //Month and year on the payslip
         private int month;
         private int year;
 
+        //Enumeration for the months of the year
         enum MonthsOfYear { JAN = 1, FEB = 2, MAR, APR, MAY, JUN, JUL, AUG, SEP, OCT, NOV, DEC}
+
+        //PaySlip constructor
         public PaySlip(int payMonth, int payYear)
         {
             month = payMonth;
@@ -198,6 +203,7 @@ namespace PayrollSoftware
 
         }
 
+        //Method that generates the payslip
         public void GeneratePaySlip(List<Staff> myStaff)
         {
             string path;
@@ -234,6 +240,7 @@ namespace PayrollSoftware
             }
         }
 
+        //Method that generates the summary
         public void GenerateSummary(List<Staff> myStaff)
         {
             var result
@@ -246,8 +253,22 @@ namespace PayrollSoftware
 
             using(StreamWriter sw = new StreamWriter(path))
             {
+                sw.WriteLine("Staff with less than 10 working hours");
+                sw.WriteLine(" ");
 
+                foreach(var f in result)
+                {
+                    sw.WriteLine("Name of Staff: {0}, Hours Worked: {1}", f.NameOfStaff, f.HoursWorked);
+                }
+
+                sw.Close();
             }
+        }
+
+        //Returns the month and the year
+        public override string ToString()
+        {
+            return "month = " + month + "year = " + year;
         }
     }
 
