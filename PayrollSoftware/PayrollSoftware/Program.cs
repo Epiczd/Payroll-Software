@@ -102,29 +102,35 @@ namespace PayrollSoftware
 
     class Admin : Staff
     {
+        //Rate for overtime worked
         private const float overtimeRate = 15.5f;
+        //Admin's hourly rate
         private const float adminHourlyrate = 30f;
 
-        public float Overtime { get; set; }
+        //Auto-implemented property for Overtime
+        public float Overtime { get; private set; }
 
+        //Constructor for the Admin class
         public Admin(string name) : base(name, adminHourlyrate)
         {
 
         }
 
+        //Same as Staff and Manager, except it takes overtime into account
         public override void CalculatePay()
         {
             base.CalculatePay();
             if (HoursWorked > 160)
             {
-
+                Overtime = overtimeRate * (HoursWorked - 160);
             }
-            Overtime = overtimeRate * (HoursWorked - 160);
         }
 
+        //Message displayed on the payroll receipt
         public override string ToString()
         {
-            return base.ToString();
+            return "\nNameOfStaff = " + NameOfStaff + "\nadminHourlyRate = " + adminHourlyrate + "\nHoursWorked = " + HoursWorked + "\nBasicPay = " + BasicPay + "\nOvertime = " + Overtime + "\nTotalPay = " + TotalPay;
+
         }
     }
 
