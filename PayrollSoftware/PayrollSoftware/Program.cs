@@ -1,4 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace PayrollSoftware
 {
@@ -14,25 +19,44 @@ namespace PayrollSoftware
          * These variables are essential to calculating pay,
          * and providing an accurate payroll
          */
-        public float TotalPay { get; set; }
-        public float BasicPay { get; set; }
-        public string NameOfStaff { get; set; }
-        public int HoursWorked;
+        public float TotalPay { get; protected set; }
+        public float BasicPay { get; private set; }
+        public string NameOfStaff { get; private set; }
+        public int HoursWorked
+        {
+            get
+            {
+                return hWorked
+            }
+            set
+            {
+                if(hWorked > 0)
+                {
+                    hWorked = value;
+                }
+                else
+                {
+                    hWorked = 0;
+                }
+            }
+        }
 
         public Staff (string name, float rate)
         {
-            name = NameOfStaff;
-            rate = hourlyRate;
+            NameOfStaff = name;
+            hourlyRate = rate;
         }
 
         public virtual void CalculatePay()
         {
+            Console.WriteLine("Calculating Pay...");
+            BasicPay = hWorked * hourlyRate;
             TotalPay = BasicPay;
         }
 
         public override string ToString()
         {
-            return base.ToString();
+            return "\nNameOfStaff = " + NameOfStaff + "\nhourlyRate = " + hourlyRate + "\nhWorked = " + hWorked + "\nBasicPay = " + BasicPay + "\nTotalPay = " + TotalPay;
         }
     }
 
