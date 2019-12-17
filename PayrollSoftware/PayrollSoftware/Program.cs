@@ -7,6 +7,75 @@ using System.Threading.Tasks;
 
 namespace PayrollSoftware
 {
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Staff> myStaff = new List<Staff>();
+            FileReader fr = new FileReader();
+            int month = 0, year = 0;
+
+            while (year == 0)
+            {
+                Console.WriteLine("\nPlease enter the year: ");
+
+                try
+                {
+                    year = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message + " Please try again.");
+                }
+
+                while (month == 0)
+                {
+                    Console.WriteLine("\nPlease enter the month: ");
+
+                    try
+                    {
+                        month = Convert.ToInt32(Console.ReadLine());
+
+                        if (month < 1 || month > 12)
+                        {
+                            Console.WriteLine("Month must be from 1 to 12, please try again.");
+                            month = 0;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message + " Please try again.");
+                    }
+                }
+
+                myStaff = fr.ReadFile();
+
+                for (int i = 0; i < myStaff.Count; i++)
+                {
+                    try
+                    {
+                        Console.WriteLine("\nEnter hours worked for {0}: ", myStaff[i].NameOfStaff);
+                        myStaff[i].HoursWorked = Convert.ToInt32(Console.ReadLine());
+                        myStaff[i].CalculatePay();
+
+                        Console.WriteLine(myStaff[i].ToString());
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        i--;
+                    }
+                }
+
+                PaySlip ps = new PaySlip(month, year);
+                ps.GeneratePaySlip(myStaff);
+                ps.GenerateSummary(myStaff);
+
+                Console.Read();
+            }
+        }
+    }
+
     class Staff
     {
         //Amount staff are paid per hour
@@ -31,7 +100,7 @@ namespace PayrollSoftware
             }
             set
             {
-                if(hWorked > 0)
+                if(value > 0)
                 {
                     hWorked = value;
                 }
@@ -93,7 +162,7 @@ namespace PayrollSoftware
         //Message displayed on the payroll receipt
         public override string ToString()
         {
-            return "\nNameOfStaff = " + NameOfStaff + "\nmanagerHourlyRate = " + managerHourlyRate + "\nHoursWorked = " + HoursWorked + "\nBasicPay = " + BasicPay + "\nAllowance = " + Allowance + "\nTotalPay = " + TotalPay;
+            return "\nNameOfStaff = " + NameOfStaff + "\nmanagerHourlyRate = " + managerHourlyRate + "\nHoursWorked = " + HoursWorked + "\nBasicPay = " + BasicPay + "\nAllowance = " + Allowance + "\n" + "\nTotalPay = " + TotalPay;
         }
 
         
@@ -129,7 +198,7 @@ namespace PayrollSoftware
         //Message displayed on the payroll receipt
         public override string ToString()
         {
-            return "\nNameOfStaff = " + NameOfStaff + "\nadminHourlyRate = " + adminHourlyrate + "\nHoursWorked = " + HoursWorked + "\nBasicPay = " + BasicPay + "\nOvertime = " + Overtime + "\nTotalPay = " + TotalPay;
+            return "\nNameOfStaff = " + NameOfStaff + "\nadminHourlyRate = " + adminHourlyrate + "\nHoursWorked = " + HoursWorked + "\nBasicPay = " + BasicPay + "\nOvertime = " + Overtime + "\n" + "\nTotalPay = " + TotalPay;
 
         }
     }
@@ -160,7 +229,7 @@ namespace PayrollSoftware
             {
                 using(StreamReader sr = new StreamReader(path))
                 {
-                    while (!sr.EndOfStream)
+                    while (sr.EndOfStream != true)
                     {
                         result = sr.ReadLine().Split(seperator, StringSplitOptions.RemoveEmptyEntries);
 
@@ -172,9 +241,10 @@ namespace PayrollSoftware
                         {
                             myStaff.Add(new Admin(result[0]));
                         }
-                        sr.Close();
+
                     }
-                }
+                    sr.Close();
+                }   
             }
             else
             {
@@ -269,73 +339,6 @@ namespace PayrollSoftware
         public override string ToString()
         {
             return "month = " + month + "year = " + year;
-        }
-    }
-
-    class Program
-    {
-        static void Main(string[] args)
-        {
-            List<Staff> myStaff = new List<Staff>();
-            FileReader fr = new FileReader();
-            int month = 0, year = 0;
-
-            while(year == 0)
-            {
-                Console.WriteLine("\nPlease enter the year: ");
-
-                try
-                {
-                    year = Convert.ToInt32(Console.ReadLine());
-                }
-                catch(Exception e)
-                {
-                    Console.WriteLine(e.Message + " Please try again.");
-                }
-
-                while(month == 0)
-                {
-                    Console.WriteLine("\nPlease enter the month: ");
-
-                    try
-                    {
-                        month = Convert.ToInt32(Console.ReadLine());
-
-                        if(month < 1 || month > 12)
-                        {
-                            Console.WriteLine("Month must be from 1 to 12, please try again.");
-                            month = 0;
-                        }
-                    }
-                    catch(Exception e)
-                    {
-                        Console.WriteLine(e.Message + " Please try again.");
-                    }
-                }
-
-                myStaff = fr.ReadFile();
-
-                for (int i = 0; i < myStaff.Count; i++)
-                {
-                    try
-                    {
-                        Console.WriteLine("\nEnter hours worked for {0}: ", myStaff[i].NameOfStaff);
-                        myStaff[i].HoursWorked = Convert.ToInt32(Console.ReadLine());
-                        myStaff[i].CalculatePay();
-                    }
-                    catch(Exception e)
-                    {
-                        Console.WriteLine(e.Message);
-                        i--;
-                    }
-                }
-
-                PaySlip ps = new PaySlip(month, year);
-                ps.GeneratePaySlip(myStaff);
-                ps.GenerateSummary(myStaff);
-
-                Console.Read();
-            }
         }
     }
 }
